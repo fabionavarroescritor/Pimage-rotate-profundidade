@@ -1,0 +1,51 @@
+PImage image;                                       // variável da imagem
+
+void setup() {
+
+  size(900, 700, P3D);                              //acerta canvas em 3D
+
+  image = loadImage("damianelwis.jpg");             //carrega imagem
+  image.resize(900, 700);
+}
+
+void draw() {
+
+  background(0);                                    //desenha fundo
+
+  float lx = map(mouseX, 0, width, -1, 1);         //variáveis paa luz direcional
+  float ly = map(mouseY, 0, height, -1, 1);
+
+  directionalLight(208, 211, 66, lx, ly, -1);       //direcional de luz
+
+  float mz = map(mouseY, 0, height, -500, 500);       //variável que mapeia eixo Z em função do brilho
+  float mx = map(mouseX, 0, width, 0, 400);          //variável para filas e colunas (rotação)  
+  float my = map(mouseY, 0, height, 0, 400);
+  
+  if(mousePressed){
+    translate(width/2, 0);
+    rotateY(radians(mouseX));                          //roda o quadro
+    translate(-width/2, 0);
+    rotateX(radians(20));
+}
+
+  for (int x = 0; x < width; x+=2) {               //construção das filas e colunas (tamanho)
+    for (int y = 0; y < height; y+=2) { 
+
+      color c = image.get(x, y);                    //pega pixel 
+      float bc = brightness(c);                     //variável do brilho do pixel
+      float z = map(bc, 0, 255, -mz, mz);        //mapeia o brilho usando eixo Z    
+
+      push();                                       //abre matrix
+      translate(x, y, z);                           //translada os eixos x,y,z
+      rotateX(radians(mouseY+my));                    
+      rotateY(radians(mouseX+mx));                   //rotaciona eixos x,y,z
+      //rotateZ(radians(mouseY+mz));
+      //fill(c);                                     //preenche box com pixel
+      noStroke();
+      stroke(c);
+      point(0,0);                                 //usa pontilhismo como forma
+      //box(10);                                     //desenha box com tamanho igual ao do tiles
+      pop();                                      //fecha matriz
+    }
+  }
+}
