@@ -1,0 +1,36 @@
+PImage imag; //classe imag
+
+void setup() {
+
+  size(1020, 610); //canvas
+
+  imag = loadImage("elastica.png"); //carrega e redimensiona a imagem
+  imag.resize(1020, 610);
+}
+
+void draw() {
+
+  fill(0);
+  rectMode(CORNER);
+  rect(0, 0, width, height); 
+
+
+  float mx = map (mouseX, 0, width, 2, 200); //variável da posição do pixel
+  float my = map (mouseY, 0, height, 2, 200); 
+
+  for (int x = 0; x < imag.width; x+= mx) {   //repetição
+    for (int y = 0; y < imag.height; y+= my) {
+      color c = imag.get(x, y);          //amostra da cor do pixel
+      float b = map(brightness(c), 0, 255, 0, 1); //variável para mapear o brilho do pixel
+
+      push();
+      translate(x,y);
+      rotate(radians(map(x, 0, width, 0, 90)+mouseX)); 
+      fill(c);
+      stroke(c);
+      rectMode(RADIUS);
+      rect(0, 0, b*mx, b*my);
+      pop();
+    }
+  }
+}
